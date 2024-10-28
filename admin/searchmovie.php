@@ -1,0 +1,41 @@
+<?php 
+include 'header.php';
+include 'ft.php';
+include 'db.php';
+?>
+<?php 
+
+$search1 = $_POST['search'];
+
+?>
+<div class="content">
+<div class="container">
+<center><h1>Search Result of "<?php echo $search1; ?>"</h1></center>
+<div class="row">
+<?php 
+
+if (isset($_POST['submit'])){
+    $search = $_POST['search'];
+    $searchpreg = preg_replace("#[^0-9a-z]#i","",$search);
+    $query = "SELECT * FROM movie where mv_name LIKE '%$search%' OR mv_tag LIKE '%$search%' OR lang LIKE '%$search%' OR director LIKE '%$search%' OR date LIKE '%$search%' ";
+    $run = mysqli_query($con,$query);
+    $count = mysqli_num_rows($run);
+    if($count == 0){
+        echo "<h1>No Movie Found!!</h1>";
+    }
+    else{
+        while($row=mysqli_fetch_assoc($run)){
+            ?>
+            <div class="col">
+                <div class="card" style="width:200px;text-align:center;">
+            <a href="viewmovie.php?id=<?php echo $row['id']; ?>"><?php echo "<img height='180px' width=' ' src='../thumb/" . $row['img'] . "' >"; ?></a>
+            <p ><?php echo $row['mv_name'] ?></p>
+            </div></div>
+            <?php
+
+        }
+    }
+}
+
+?></div>
+</div>
